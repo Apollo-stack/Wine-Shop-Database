@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto SQL: Loja de Vinhos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Beige, Stone, Wine Red) -->
+    <!-- Application Structure Plan: A single-page, guided tutorial structure with four main sections corresponding to the SQL assignment tasks (DDL, DML, DQL, DCL). Navigation allows users to follow the steps linearly or jump between them. Interactivity is provided through tabbed code blocks to organize information and visual HTML tables to simulate database state and query results. This educational structure was chosen to transform a static code assignment into an interactive learning tool, making abstract SQL concepts more tangible and easier to understand. -->
+    <!-- Visualization & Content Choices: DDL/DML: Goal(Organize/Inform) -> Tabbed code blocks -> Click to switch views -> Justification(Breaks down complex scripts). DML Data: Goal(Inform) -> HTML Tables -> Static display -> Justification(Visualizes the result of INSERTs). DQL Result: Goal(Inform) -> HTML Table -> Static display -> Justification(Clearly shows the output of the JOIN query). DCL Permissions: Goal(Explain) -> Side-by-side HTML tables simulating user views -> Static display -> Justification(Makes the abstract concept of permissions concrete). All visualizations are done with structured HTML/Tailwind, confirming NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+            color: #292524; /* stone-800 */
+        }
+        .active-tab {
+            border-color: #991b1b; /* red-800 */
+            color: #991b1b;
+            background-color: #f5f5f4;
+        }
+        .inactive-tab {
+            border-color: transparent;
+        }
+        pre {
+            background-color: #1c1917; /* stone-900 */
+            color: #f5f5f4;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        code {
+            font-family: monospace;
+        }
+        .sql-keyword { color: #f97316; } /* orange-500 */
+        .sql-type { color: #22c55e; } /* green-500 */
+        .sql-string { color: #eab308; } /* yellow-500 */
+        .sql-comment { color: #a8a29e; } /* stone-400 */
+        .sql-table { color: #38bdf8; } /* lightBlue-400 */
+        .sql-function { color: #ec4899; } /* pink-500 */
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-stone-900">Projeto SQL: Loja de Vinhos</h1>
+            <p class="mt-4 text-lg text-stone-600">Um guia interativo para as etapas do seu trabalho de banco de dados.</p>
+        </header>
+
+        <nav class="sticky top-0 bg-stone-100/80 backdrop-blur-md z-10 mb-12 rounded-lg shadow-sm">
+            <div class="flex justify-center items-center p-2 space-x-2 sm:space-x-4">
+                <a href="#ddl" class="nav-link text-sm sm:text-base font-medium text-stone-700 hover:text-red-800 px-3 py-2 rounded-md">1. Modelo Físico (DDL)</a>
+                <a href="#dml" class="nav-link text-sm sm:text-base font-medium text-stone-700 hover:text-red-800 px-3 py-2 rounded-md">2. Inserção de Dados (DML)</a>
+                <a href="#dql" class="nav-link text-sm sm:text-base font-medium text-stone-700 hover:text-red-800 px-3 py-2 rounded-md">3. Consulta (DQL)</a>
+                <a href="#dcl" class="nav-link text-sm sm:text-base font-medium text-stone-700 hover:text-red-800 px-3 py-2 rounded-md">4. Controle de Acesso (DCL)</a>
+            </div>
+        </nav>
+
+        <main class="space-y-16">
+            <section id="ddl">
+                <h2 class="text-3xl font-bold text-red-800 border-b-2 border-red-200 pb-2 mb-6">1. Modelo Físico (DDL - Data Definition Language)</h2>
+                <p class="mb-8 text-stone-700">A primeira etapa é definir a estrutura do nosso banco de dados. Usamos os comandos DDL para criar as "plantas baixas" das nossas tabelas, especificando quais colunas elas terão, os tipos de dados de cada uma e como elas se relacionam através de chaves primárias e estrangeiras.</p>
+                
+                <div id="ddl-tabs" class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="border-b border-stone-200">
+                        <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                            <button class="ddl-tab-button active-tab whitespace-nowrap py-3 px-1 border-b-2 font-medium text-lg" data-target="regiao">Regiao</button>
+                            <button class="ddl-tab-button inactive-tab whitespace-nowrap py-3 px-1 border-b-2 font-medium text-lg" data-target="vinicula">Vinicula</button>
+                            <button class="ddl-tab-button inactive-tab whitespace-nowrap py-3 px-1 border-b-2 font-medium text-lg" data-target="vinho">Vinho</button>
+                        </nav>
+                    </div>
+                    <div id="ddl-content" class="mt-6">
+                        <div id="regiao-content" class="ddl-tab-content">
+                            <pre><code><span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">`Regiao`</span> (
+  <span class="sql-table">`codRegiao`</span> <span class="sql-type">BIGINT</span> <span class="sql-keyword">NOT NULL AUTO_INCREMENT</span>,
+  <span class="sql-table">`nomeRegiao`</span> <span class="sql-type">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,
+  <span class="sql-table">`descricaoRegiao`</span> <span class="sql-type">TEXT</span>,
+  <span class="sql-keyword">PRIMARY KEY</span> (<span class="sql-table">`codRegiao`</span>)
+);</code></pre>
+                        </div>
+                        <div id="vinicula-content" class="ddl-tab-content hidden">
+                            <pre><code><span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">`Vinicula`</span> (
+  <span class="sql-table">`codVinicula`</span> <span class="sql-type">BIGINT</span> <span class="sql-keyword">NOT NULL AUTO_INCREMENT</span>,
+  <span class="sql-table">`nomeVinicula`</span> <span class="sql-type">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,
+  <span class="sql-table">`descricaoVinicula`</span> <span class="sql-type">TEXT</span>,
+  <span class="sql-table">`foneVinicula`</span> <span class="sql-type">VARCHAR</span>(15),
+  <span class="sql-table">`emailVinicula`</span> <span class="sql-type">VARCHAR</span>(100),
+  <span class="sql-table">`codRegiao`</span> <span class="sql-type">BIGINT</span> <span class="sql-keyword">NOT NULL</span>,
+  <span class="sql-keyword">PRIMARY KEY</span> (<span class="sql-table">`codVinicula`</span>),
+  <span class="sql-keyword">FOREIGN KEY</span> (<span class="sql-table">`codRegiao`</span>) <span class="sql-keyword">REFERENCES</span> <span class="sql-table">`Regiao`</span>(<span class="sql-table">`codRegiao`</span>)
+);</code></pre>
+                        </div>
+                        <div id="vinho-content" class="ddl-tab-content hidden">
+                            <pre><code><span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">`Vinho`</span> (
+  <span class="sql-table">`codVinho`</span> <span class="sql-type">BIGINT</span> <span class="sql-keyword">NOT NULL AUTO_INCREMENT</span>,
+  <span class="sql-table">`nomeVinho`</span> <span class="sql-type">VARCHAR</span>(50) <span class="sql-keyword">NOT NULL</span>,
+  <span class="sql-table">`tipoVinho`</span> <span class="sql-type">VARCHAR</span>(30),
+  <span class="sql-table">`anoVinho`</span> <span class="sql-type">INT</span>,
+  <span class="sql-table">`descricaoVinho`</span> <span class="sql-type">TEXT</span>,
+  <span class="sql-table">`codVinicola`</span> <span class="sql-type">BIGINT</span> <span class="sql-keyword">NOT NULL</span>,
+  <span class="sql-keyword">PRIMARY KEY</span> (<span class="sql-table">`codVinho`</span>),
+  <span class="sql-keyword">FOREIGN KEY</span> (<span class="sql-table">`codVinicola`</span>) <span class="sql-keyword">REFERENCES</span> <span class="sql-table">`Vinicula`</span>(<span class="sql-table">`codVinicola`</span>)
+);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="dml">
+                <h2 class="text-3xl font-bold text-red-800 border-b-2 border-red-200 pb-2 mb-6">2. Inserção de Dados (DML - Data Manipulation Language)</h2>
+                <p class="mb-8 text-stone-700">Com a estrutura pronta, é hora de popular nossas tabelas. Usamos os comandos DML para inserir os registros. É crucial manter a integridade referencial, ou seja, inserir primeiro os dados nas tabelas que não dependem de outras (como `Regiao`), para depois inserir em tabelas que se referenciam a elas (como `Vinicula` e `Vinho`).</p>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 text-stone-800">Visualização dos Dados Inseridos</h3>
+                     <div class="space-y-6">
+                        <div>
+                            <h4 class="font-medium text-lg text-red-800 mb-2">Tabela: Regiao</h4>
+                            <div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead><tr class="bg-stone-100"><th class="p-2 border">codRegiao</th><th class="p-2 border">nomeRegiao</th></tr></thead><tbody><tr><td class="p-2 border">1</td><td class="p-2 border">Vale dos Vinhedos</td></tr><tr><td class="p-2 border">2</td><td class="p-2 border">Serra Gaúcha</td></tr><tr><td class="p-2 border">3</td><td class="p-2 border">Vale do São Francisco</td></tr><tr><td class="p-2 border">4</td><td class="p-2 border">Campanha Gaúcha</td></tr><tr><td class="p-2 border">5</td><td class="p-2 border">Serra do Sudeste</td></tr></tbody></table></div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-lg text-red-800 mb-2">Tabela: Vinicula</h4>
+                            <div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead><tr class="bg-stone-100"><th class="p-2 border">codVinicula</th><th class="p-2 border">nomeVinicula</th><th class="p-2 border">codRegiao</th></tr></thead><tbody><tr><td class="p-2 border">1</td><td class="p-2 border">Casa Valduga</td><td class="p-2 border">1</td></tr><tr><td class="p-2 border">2</td><td class="p-2 border">Miolo</td><td class="p-2 border">1</td></tr><tr><td class="p-2 border">3</td><td class="p-2 border">Aurora</td><td class="p-2 border">2</td></tr><tr><td class="p-2 border">4</td><td class="p-2 border">Vinibrasil (Rio Sol)</td><td class="p-2 border">3</td></tr><tr><td class="p-2 border">5</td><td class="p-2 border">Guatambu</td><td class="p-2 border">4</td></tr></tbody></table></div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-lg text-red-800 mb-2">Tabela: Vinho</h4>
+                            <div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead><tr class="bg-stone-100"><th class="p-2 border">codVinho</th><th class="p-2 border">nomeVinho</th><th class="p-2 border">tipoVinho</th><th class="p-2 border">anoVinho</th><th class="p-2 border">codVinicula</th></tr></thead><tbody><tr><td class="p-2 border">1</td><td class="p-2 border">130 Brut</td><td class="p-2 border">Espumante</td><td class="p-2 border">2022</td><td class="p-2 border">1</td></tr><tr><td class="p-2 border">2</td><td class="p-2 border">Lote 43</td><td class="p-2 border">Tinto</td><td class="p-2 border">2020</td><td class="p-2 border">2</td></tr><tr><td class="p-2 border">3</td><td class="p-2 border">Merlot</td><td class="p-2 border">Tinto</td><td class="p-2 border">2021</td><td class="p-2 border">3</td></tr><tr><td class="p-2 border">4</td><td class="p-2 border">Rio Sol Syrah</td><td class="p-2 border">Tinto</td><td class="p-2 border">2020</td><td class="p-2 border">4</td></tr><tr><td class="p-2 border">5</td><td class="p-2 border">Rastros do Pampa Cabernet</td><td class="p-2 border">Tinto</td><td class="p-2 border">2019</td><td class="p-2 border">5</td></tr></tbody></table></div>
+                        </div>
+                     </div>
+                </div>
+            </section>
+
+            <section id="dql">
+                <h2 class="text-3xl font-bold text-red-800 border-b-2 border-red-200 pb-2 mb-6">3. Consulta (DQL - Data Query Language)</h2>
+                <p class="mb-8 text-stone-700">Com os dados no lugar, podemos "conversar" com o banco. O DQL nos permite fazer perguntas. A tarefa pede para listar os vinhos, suas vinícolas e as regiões de origem. Para isso, usamos o `JOIN`, que "costura" as informações das três tabelas usando as chaves que as conectam.</p>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 text-stone-800">Comando de Consulta</h3>
+                    <pre><code><span class="sql-keyword">SELECT</span>
+    <span class="sql-table">Vinho</span>.nomeVinho,
+    <span class="sql-table">Vinho</span>.anoVinho,
+    <span class="sql-table">Vinicula</span>.nomeVinicula,
+    <span class="sql-table">Regiao</span>.nomeRegiao
+<span class="sql-keyword">FROM</span>
+    <span class="sql-table">Vinho</span>
+<span class="sql-keyword">JOIN</span>
+    <span class="sql-table">Vinicula ON Vinho.codVinicola = Vinicula.codVinicola</span>
+<span class="sql-keyword">JOIN</span>
+    <span class="sql-table">Regiao ON Vinicula.codRegiao = Regiao.codRegiao;</span></code></pre>
+                    <h3 class="text-xl font-semibold mt-8 mb-4 text-stone-800">Resultado da Consulta</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-stone-100">
+                                    <th class="p-2 border">nomeVinho</th>
+                                    <th class="p-2 border">anoVinho</th>
+                                    <th class="p-2 border">nomeVinicula</th>
+                                    <th class="p-2 border">nomeRegiao</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-2 border">130 Brut</td><td class="p-2 border">2022</td><td class="p-2 border">Casa Valduga</td><td class="p-2 border">Vale dos Vinhedos</td></tr>
+                                <tr><td class="p-2 border">Lote 43</td><td class="p-2 border">2020</td><td class="p-2 border">Miolo</td><td class="p-2 border">Vale dos Vinhedos</td></tr>
+                                <tr><td class="p-2 border">Merlot</td><td class="p-2 border">2021</td><td class="p-2 border">Aurora</td><td class="p-2 border">Serra Gaúcha</td></tr>
+                                <tr><td class="p-2 border">Rio Sol Syrah</td><td class="p-2 border">2020</td><td class="p-2 border">Vinibrasil (Rio Sol)</td><td class="p-2 border">Vale do São Francisco</td></tr>
+                                <tr><td class="p-2 border">Rastros do Pampa Cabernet</td><td class="p-2 border">2019</td><td class="p-2 border">Guatambu</td><td class="p-2 border">Campanha Gaúcha</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="dcl">
+                <h2 class="text-3xl font-bold text-red-800 border-b-2 border-red-200 pb-2 mb-6">4. Controle de Acesso (DCL - Data Control Language)</h2>
+                <p class="mb-8 text-stone-700">A segurança é fundamental em qualquer banco de dados. Com o DCL, criamos usuários e controlamos exatamente o que eles podem ver e fazer. Aqui, criamos o usuário `Somellier` com acesso limitado, garantindo que ele veja apenas as informações estritamente necessárias para seu trabalho, e com um limite de consultas por hora.</p>
+                <div class="bg-white p-6 rounded-lg shadow-md space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-stone-800">Comando de Criação do Usuário</h3>
+                        <pre><code><span class="sql-comment">-- Cria o usuário 'Somellier' que só pode acessar localmente, com senha e limite de 40 consultas/hora.</span>
+<span class="sql-keyword">CREATE USER</span> <span class="sql-string">'Somellier'</span>@<span class="sql-string">'localhost'</span>
+<span class="sql-keyword">IDENTIFIED BY</span> <span class="sql-string">'uma_senha_segura'</span>
+<span class="sql-keyword">WITH</span> <span class="sql-function">MAX_QUERIES_PER_HOUR</span> 40;</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-stone-800">Comandos de Permissão</h3>
+                        <pre><code><span class="sql-comment">-- Concede permissão de leitura (SELECT) em todas as colunas da tabela Vinho.</span>
+<span class="sql-keyword">GRANT SELECT ON</span> Servienski.Vinho <span class="sql-keyword">TO</span> <span class="sql-string">'Somellier'</span>@<span class="sql-string">'localhost'</span>;
+
+<span class="sql-comment">-- Concede permissão de leitura (SELECT) apenas nas colunas codVinicula e nomeVinicula da tabela Vinicula.</span>
+<span class="sql-keyword">GRANT SELECT</span> (codVinicula, nomeVinicula) <span class="sql-keyword">ON</span> Servienski.Vinicula <span class="sql-keyword">TO</span> <span class="sql-string">'Somellier'</span>@<span class="sql-string">'localhost'</span>;</code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-stone-800">Simulação: O que o 'Somellier' pode ver</h3>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="border rounded-lg p-4">
+                                <h4 class="font-bold text-green-700 text-lg">Acesso PERMITIDO ✅</h4>
+                                <p class="text-sm mb-2 text-stone-600">O usuário pode ver TODAS as colunas da tabela `Vinho`.</p>
+                                <div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead><tr class="bg-stone-100"><th class="p-2 border">codVinho</th><th class="p-2 border">nomeVinho</th><th class="p-2 border">tipoVinho</th><th class="p-2 border">anoVinho</th><th class="p-2 border">codVinicula</th></tr></thead><tbody><tr><td class="p-2 border">...</td><td class="p-2 border">...</td><td class="p-2 border">...</td><td class="p-2 border">...</td><td class="p-2 border">...</td></tr></tbody></table></div>
+                            </div>
+                             <div class="border rounded-lg p-4">
+                                <h4 class="font-bold text-red-700 text-lg">Acesso RESTRITO 🚫</h4>
+                                <p class="text-sm mb-2 text-stone-600">O usuário pode ver APENAS duas colunas da tabela `Vinicula`.</p>
+                                <div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead><tr class="bg-stone-100"><th class="p-2 border bg-green-100">codVinicula</th><th class="p-2 border bg-green-100">nomeVinicula</th><th class="p-2 border bg-red-100">descrição</th><th class="p-2 border bg-red-100">fone</th></tr></thead><tbody><tr><td class="p-2 border">...</td><td class="p-2 border">...</td><td class="p-2 border text-red-500">NEGADO</td><td class="p-2 border text-red-500">NEGADO</td></tr></tbody></table></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ddlTabButtons = document.querySelectorAll('.ddl-tab-button');
+            const ddlTabContents = document.querySelectorAll('.ddl-tab-content');
+
+            ddlTabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+
+                    ddlTabButtons.forEach(btn => {
+                        btn.classList.remove('active-tab');
+                        btn.classList.add('inactive-tab');
+                    });
+                    button.classList.add('active-tab');
+                    button.classList.remove('inactive-tab');
+
+                    ddlTabContents.forEach(content => {
+                        if (content.id === `${targetId}-content`) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
