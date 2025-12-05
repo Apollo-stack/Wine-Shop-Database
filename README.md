@@ -6,7 +6,7 @@ This repository hosts the database structure for a Wine Shop ("Adega"), featurin
 
 ## 🚀 Live Documentation
 Check out the interactive documentation for this project here:
-[LINK DO GITHUB PAGES ]
+https://apollo-stack.github.io/Wine-Shop-Database/
 
 ## 🛠️ Key Features
 - **Database Schema:** Tables for `Vinho` (Wine), `Vinicola` (Winery), and `Regiao` (Region).
